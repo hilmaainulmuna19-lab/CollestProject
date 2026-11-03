@@ -113,7 +113,6 @@ $('loginForm').addEventListener('submit', (ev) => {
   const r = login($('loginUser').value, $('loginPass').value);
   if (!r.ok) { $('loginError').textContent = r.error; $('loginError').hidden = false; return; }
   modal.close();
-  if (r.user.role === 'organizer') { location.href = 'admin.html'; return; }
   renderUser();
   toast(`Halo, ${r.user.name}! Kamu sudah masuk.`);
 });
