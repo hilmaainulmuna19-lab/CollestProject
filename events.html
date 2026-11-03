@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cari Event & Kepanitiaan Kampus - COLLEST">
+  <title>Cari Event &amp; Kepanitiaan — COLLEST</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/tiles.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/events.css">
+  <link rel="icon" type="image/png" href="assets/collest-logo.png">
+</head>
+<body class="has-tiles">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="index.html" class="header__brand" aria-label="Beranda COLLEST">
+        <img src="assets/collest-logo.png" alt="Logo COLLEST" class="header__logo-img">
+        <span class="header__brand-name">COLLEST</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="header__nav" aria-label="Navigasi Utama">
+        <a href="index.html" class="header__link">Beranda</a>
+        <a href="events.html" class="header__link is-active">Cari Event</a>
+        <a href="vendors.html" class="header__link">Cari Vendor</a>
+        <a href="rundown.html" class="header__link">Buat Rundown</a>
+      </nav>
+
+      <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Buka Menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Mobile Nav -->
+    <nav id="mobileNav" class="mobile-nav" aria-label="Navigasi Mobile">
+      <a href="index.html" class="header__link">Beranda</a>
+      <a href="events.html" class="header__link is-active">Cari Event</a>
+      <a href="vendors.html" class="header__link">Cari Vendor</a>
+      <a href="rundown.html" class="header__link">Buat Rundown</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1 class="page-title">Cari <em>Event</em> &amp; Kepanitiaan</h1>
+      <p class="page-subtitle">
+        Pilih event yang kamu minati. Geser kartunya untuk melihat spesifikasi, divisi, dan benefit, lalu daftar langsung di sini.
+      </p>
+    </div>
+
+    <!-- Pencarian pill -->
+    <form class="hero-search hero-search--center" id="eventFilterForm" role="search" aria-label="Cari event" onsubmit="return false">
+      <label for="eventCategorySelect" class="sr-only">Kategori</label>
+      <select id="eventCategorySelect">
+        <option value="Semua">Semua kategori</option>
+        <option value="Teknologi">Teknologi</option>
+        <option value="Musik">Musik</option>
+        <option value="Expo">Expo &amp; Bisnis</option>
+        <option value="Lomba">Lomba</option>
+        <option value="Workshop">Workshop</option>
+      </select>
+      <label for="eventSearchInput" class="sr-only">Kata kunci</label>
+      <input type="text" id="eventSearchInput" placeholder="Nama event, penyelenggara, atau lokasi" autocomplete="off">
+      <button id="resetEventFilterBtn" type="button">Reset</button>
+    </form>
+
+    <p class="swipe-hint" aria-hidden="true"><span>Geser kartu ke kiri untuk melihat spesifikasi</span> <i class="swipe-hint__arrow"></i></p>
+
+    <!-- Kartu event (diisi js/events-page.js) -->
+    <div id="eventsGrid" class="ev-grid" aria-live="polite"></div>
+
+    <div id="eventsEmptyState" class="empty-state" style="display:none;">
+      <p>Tidak ada event yang cocok dengan pencarianmu.</p>
+    </div>
+  </main>
+
+  <!-- Modal Pendaftaran (tersimpan sementara di browser ini) -->
+  <dialog id="eventDetailModal" class="modal" aria-labelledby="modalEventTitle">
+    <div class="modal__dialog">
+      <div class="modal__header">
+        <h3 id="modalEventTitle" class="modal__title">Daftar Kepanitiaan</h3>
+        <button id="closeEventModalBtn" class="modal__close" type="button" aria-label="Tutup">&times;</button>
+      </div>
+      <div class="modal__body">
+        <div id="applyFormView">
+          <div id="modalEventMeta" class="modal-meta"></div>
+
+          <form id="applicantForm" novalidate>
+            <div class="form-group" style="margin-bottom:.85rem;">
+              <label for="formApplicantName" class="form-label">Nama <span class="req">*</span></label>
+              <input type="text" id="formApplicantName" class="form-input" placeholder="Nama lengkap mahasiswa" autocomplete="name" required>
+            </div>
+
+            <div class="form-group" style="margin-bottom:.85rem;">
+              <label for="formStudentNumber" class="form-label">NIM <span class="req">*</span></label>
+              <input type="text" id="formStudentNumber" class="form-input" inputmode="numeric" placeholder="Nomor induk mahasiswa (angka)" required>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="formDivisionSelect" class="form-label">Divisi yang dipilih</label>
+                <select id="formDivisionSelect" class="form-select" required></select>
+              </div>
+              <div class="form-group">
+                <label for="formRoleSelect" class="form-label">Bagian yang dipilih</label>
+                <select id="formRoleSelect" class="form-select" required></select>
+              </div>
+            </div>
+            <div id="openingPreview" class="opening-preview" style="display:none;"></div>
+
+            <div class="form-group" style="margin-bottom:1.1rem;">
+              <label for="formApplicantReason" class="form-label">Alasan join kepanitiaan <span class="req">*</span></label>
+              <textarea id="formApplicantReason" class="form-textarea" rows="3" placeholder="Ceritakan singkat kenapa kamu ingin bergabung..." required></textarea>
+            </div>
+
+            <p id="formError" class="form-error" style="display:none;" role="alert"></p>
+
+            <button type="submit" class="btn btn--primary btn--full btn--lg">Kirim Pendaftaran</button>
+            <p class="form-note">Ini proyek dummy: data pendaftaran disimpan sementara di browser ini dan hanya dapat dilihat panitia.</p>
+          </form>
+        </div>
+
+        <div id="applySuccessView" class="apply-success" hidden>
+          <div class="apply-success__icon" aria-hidden="true">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h4 class="apply-success__title">Pendaftaran tersimpan</h4>
+          <p id="applySuccessText" class="apply-success__text"></p>
+          <div class="apply-success__code"><span>Kode pendaftaran</span><b id="applySuccessCode">COL-0000</b></div>
+          <div class="apply-success__actions">
+            <button id="applyDoneBtn" class="btn btn--primary" type="button">Selesai</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div><strong>COLLEST</strong> &mdash; One Platform, Every Event Need</div>
+      <div class="footer__links">
+        <a href="index.html">Beranda</a>
+        <a href="events.html">Cari Event</a>
+        <a href="vendors.html">Cari Vendor</a>
+        <a href="rundown.html">Buat Rundown</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/pages/events.js"></script>
+</body>
+</html>

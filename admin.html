@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Area Organizer (Demo) — COLLEST</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/tiles.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="icon" type="image/png" href="assets/collest-logo.png">
+</head>
+<body style="background-color: #f1f5f9;">
+
+  <!-- Header Admin -->
+  <header class="header">
+    <div class="container header__inner">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="index.html" class="header__brand" aria-label="Kembali ke Beranda">
+          <img src="assets/collest-logo.png" alt="Logo COLLEST" class="header__logo-img">
+          <div class="header__brand-text">
+            <span class="header__brand-name">COLLEST</span>
+            <span class="header__brand-tagline">Area Organizer (Demo)</span>
+          </div>
+        </a>
+      </div>
+
+      <div class="header__actions" id="adminActions" hidden>
+        <a href="index.html" class="btn btn--secondary btn--sm">
+          &larr; Kembali ke Website Utama
+        </a>
+        <button id="resetSeedDataBtn" class="btn btn--danger btn--sm" type="button">
+          Reset Data ke Default
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Layar terkunci untuk selain akun panitia -->
+  <section id="adminGate" class="container" style="padding: 5rem var(--space-md); text-align:center;" hidden>
+    <h1 style="font-size:1.6rem; font-weight:800; color:var(--color-charcoal-dark);">Area Organizer terkunci</h1>
+    <p id="gateText" style="margin:.75rem auto 1.5rem; max-width:420px; color:var(--color-text-muted); line-height:1.6;"></p>
+    <a id="gateLogin" href="index.html?login=1" class="btn btn--primary">Masuk</a>
+    <a href="index.html" class="btn btn--secondary">Kembali ke Beranda</a>
+  </section>
+
+  <main id="adminMain" class="container" style="padding: 2rem var(--space-md) 4rem;" hidden>
+    <!-- Disclaimer Callout -->
+    <div class="callout callout--demo" style="margin-bottom: 2rem;">
+      <h3 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 0.35rem; color: #92400e;">
+        Catatan: Area Demo Frontend
+      </h3>
+      <p style="line-height: 1.5; font-size: 0.9rem;">
+        Akses dibatasi akun panitia lewat login hardcode (simulasi, bukan keamanan sungguhan). Katalog event dan seluruh pendaftaran panitia disimpan sementara di <code>localStorage</code> peramban ini (prefix <code>collest:v1:</code>). Data hilang jika data situs dibersihkan dan tidak terkirim ke server mana pun.
+      </p>
+    </div>
+
+    <!-- Quick Stats Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2.5rem;">
+      <div class="card" style="padding: 1.25rem;">
+        <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Event Dibuka</span>
+        <div id="statOpenEvents" style="font-size: 2rem; font-weight: 900; color: var(--color-primary); margin: 0.35rem 0;">0</div>
+        <span style="font-size: 0.775rem; color: var(--color-text-muted);">Menerima pendaftaran</span>
+      </div>
+      <div class="card" style="padding: 1.25rem;">
+        <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase;">Event Ditutup</span>
+        <div id="statClosedEvents" style="font-size: 2rem; font-weight: 900; color: var(--color-primary); margin: 0.35rem 0;">0</div>
+        <span style="font-size: 0.775rem; color: var(--color-text-muted);">Status ditutup / lewat deadline</span>
+      </div>
+      <div class="card" style="padding: 1.25rem; border-color: var(--color-accent-blue);">
+        <span style="font-size: 0.8rem; font-weight: 700; color: var(--color-accent-blue); text-transform: uppercase;">Pendaftar Tercatat</span>
+        <div id="statRegistrations" style="font-size: 2rem; font-weight: 900; color: var(--color-accent-blue); margin: 0.35rem 0;">0</div>
+        <span style="font-size: 0.775rem; color: var(--color-text-muted);">Tercatat dari browser ini</span>
+      </div>
+    </div>
+
+    <!-- TAB SECTION: 1. Pendaftaran Masuk Mahasiswa -->
+    <div class="calc-card" style="margin-bottom: 2rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+        <div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--color-primary);">
+            1. Log Pendaftaran Kepanitiaan
+          </h2>
+          <p style="font-size: 0.875rem; color: var(--color-text-muted);">
+            Setiap mahasiswa yang mendaftar lewat halaman Cari Event tercatat otomatis di sini.
+          </p>
+        </div>
+        <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
+          <button id="clearRegistrationsBtn" class="btn btn--secondary btn--sm" type="button">Bersihkan Log</button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table" id="adminRegistrationsTable">
+          <thead>
+            <tr>
+              <th style="width: 18%;">Nama</th>
+              <th style="width: 12%;">NIM</th>
+              <th style="width: 22%;">Event</th>
+              <th style="width: 16%;">Divisi / Bagian</th>
+              <th style="width: 20%;">Alasan</th>
+              <th style="width: 12%;">Waktu</th>
+            </tr>
+          </thead>
+          <tbody id="adminRegistrationsBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TAB SECTION: 3. Daftar Katalog Event & Tambah Event Demo -->
+    <div class="calc-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+        <div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--color-primary);">
+            2. Manajemen Katalog Event
+          </h2>
+          <p style="font-size: 0.875rem; color: var(--color-text-muted);">
+            Daftar event yang ditampilkan pada pengunjung. Tambah, tutup/buka, atau hapus event.
+          </p>
+        </div>
+        <button id="openAddEventModalBtn" class="btn btn--primary btn--sm">
+          + Tambah Event Baru
+        </button>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table" id="adminEventsTable">
+          <thead>
+            <tr>
+              <th style="width: 25%;">Judul Event</th>
+              <th style="width: 15%;">Kategori</th>
+              <th style="width: 20%;">Penyelenggara &amp; Lokasi</th>
+              <th style="width: 15%;">Tanggal</th>
+              <th style="width: 15%;">Status</th>
+              <th style="width: 16%;">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="adminEventsBody">
+            <!-- Populated via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL: Tambah Event Baru Demo -->
+  <dialog id="addEventModal" class="modal">
+    <div class="modal__dialog">
+      <div class="modal__header">
+        <h3 class="modal__title">Tambah Event Baru</h3>
+        <button id="closeAddEventModalBtn" class="modal__close" type="button">&times;</button>
+      </div>
+      <div class="modal__body">
+        <form id="addEventForm" novalidate>
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label for="newEventTitle" class="form-label">Judul Event <span class="req">*</span></label>
+            <input type="text" id="newEventTitle" class="form-input" placeholder="Contoh: Seminar Nasional AI 2026" required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.85rem;">
+            <div class="form-group">
+              <label for="newEventCategory" class="form-label">Kategori <span class="req">*</span></label>
+              <select id="newEventCategory" class="form-select" required>
+                <option value="Teknologi">Teknologi</option>
+                <option value="Musik">Musik</option>
+                <option value="Expo">Expo</option>
+                <option value="Lomba">Lomba</option>
+                <option value="Workshop">Workshop</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="newEventStatus" class="form-label">Status</label>
+              <select id="newEventStatus" class="form-select">
+                <option value="published">Dipublikasikan (Terbuka)</option>
+                <option value="closed">Ditutup</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.85rem;">
+            <div class="form-group">
+              <label for="newEventOrganizer" class="form-label">Penyelenggara <span class="req">*</span></label>
+              <input type="text" id="newEventOrganizer" class="form-input" placeholder="BEM / Himpunan" required>
+            </div>
+            <div class="form-group">
+              <label for="newEventLocation" class="form-label">Lokasi / Kampus <span class="req">*</span></label>
+              <input type="text" id="newEventLocation" class="form-input" placeholder="Auditorium Kampus" required>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.85rem;">
+            <div class="form-group">
+              <label for="newEventStartsAt" class="form-label">Tanggal Pelaksanaan <span class="req">*</span></label>
+              <input type="date" id="newEventStartsAt" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label for="newEventDeadline" class="form-label">Deadline Pendaftaran <span class="req">*</span></label>
+              <input type="date" id="newEventDeadline" class="form-input" required>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0.85rem;">
+            <label for="newEventDivisions" class="form-label">Divisi &amp; Bagian</label>
+            <textarea id="newEventDivisions" class="form-textarea" rows="3">Acara: MC, Pengatur Rundown</textarea>
+            <span style="font-size:.775rem; color:var(--color-text-muted);">Satu divisi per baris, format <code>Nama Divisi: Bagian1, Bagian2</code>.</span>
+          </div>
+
+          <p id="addEventError" style="display:none; color:#b91c1c; font-size:.85rem; margin-bottom:.75rem;"></p>
+
+          <div class="form-group" style="margin-bottom: 1.25rem;">
+            <label for="newEventDesc" class="form-label">Deskripsi Singkat Event</label>
+            <textarea id="newEventDesc" class="form-textarea" rows="3" placeholder="Jelaskan ringkasan acara..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--full">
+            Simpan Event
+          </button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <script type="module" src="js/pages/admin.js"></script>
+</body>
+</html>

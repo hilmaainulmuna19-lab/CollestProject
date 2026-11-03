@@ -1,0 +1,42 @@
+/* Latar tile gradasi di bagian atas halaman. */
+
+.hero__tiles {
+  overflow: hidden;
+  max-width: 100vw;
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 300px;
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 14), minmax(0, 1fr));
+  gap: 8px;
+  padding: 0 0 0 0;
+  z-index: -1;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(#000 0%, #000 52%, transparent 100%);
+  mask-image: linear-gradient(#000 0%, #000 52%, transparent 100%);
+  background: linear-gradient(90deg, #cfe0ff 0%, #e4e8f2 52%, #ffd9b8 100%);
+}
+
+.tile {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 14px;
+  background: var(--t, transparent);
+  opacity: var(--o, 1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.tile--star::after {
+  content: '';
+  position: absolute;
+  right: -13px; bottom: -13px;
+  width: 18px; height: 18px;
+  background: var(--s, var(--color-royal-blue-bright));
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  z-index: 1;
+}
+
+@media (max-width: 560px) {
+  .section { padding: 3.25rem 0; }
+  .hero__tiles { height: 260px; gap: 6px; }
+}

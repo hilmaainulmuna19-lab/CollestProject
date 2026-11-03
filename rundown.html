@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Buat Rundown Acara Kampus Otomatis - COLLEST">
+  <title>Buat Rundown Acara — COLLEST</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/tiles.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="icon" type="image/png" href="assets/collest-logo.png">
+</head>
+<body class="has-tiles">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="index.html" class="header__brand" aria-label="Beranda COLLEST">
+        <img src="assets/collest-logo.png" alt="Logo COLLEST" class="header__logo-img">
+        <span class="header__brand-name">COLLEST</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="header__nav" aria-label="Navigasi Utama">
+        <a href="index.html" class="header__link">Beranda</a>
+        <a href="events.html" class="header__link">Cari Event</a>
+        <a href="vendors.html" class="header__link">Cari Vendor</a>
+        <a href="rundown.html" class="header__link is-active">Buat Rundown</a>
+      </nav>
+
+      <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Buka Menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Mobile Nav -->
+    <nav id="mobileNav" class="mobile-nav" aria-label="Navigasi Mobile">
+      <a href="index.html" class="header__link">Beranda</a>
+      <a href="events.html" class="header__link">Cari Event</a>
+      <a href="vendors.html" class="header__link">Cari Vendor</a>
+      <a href="rundown.html" class="header__link is-active">Buat Rundown</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1 class="page-title">Buat Rundown Acara</h1>
+      <p class="page-subtitle">
+        Setiap sesi bisa diberi jam mulai sendiri, misalnya briefing panitia pukul 08.20. Sesi setelahnya otomatis bergeser agar menyambung.
+      </p>
+    </div>
+
+    <!-- Rundown Control Box -->
+    <div class="filter-box" style="margin-bottom: 1.5rem;">
+      <div style="display: flex; flex-wrap: wrap; gap: 0.85rem; align-items: flex-end;">
+        <div class="form-group" style="min-width: 150px;">
+          <label for="startTimeInput" class="form-label">Jam Mulai Acara</label>
+          <input type="time" id="startTimeInput" class="form-input" value="09:00">
+        </div>
+        <div class="form-group" style="width: 130px;">
+          <label for="sessionTimeInput" class="form-label">Jam Mulai Sesi</label>
+          <input type="time" id="sessionTimeInput" class="form-input" aria-describedby="sessionTimeHint">
+          <small id="sessionTimeHint" style="display:block; margin-top:.3rem; font-size:.75rem; color:var(--color-text-light);">Kosongkan = setelah sesi terakhir</small>
+        </div>
+        <div class="form-group" style="flex: 1; min-width: 200px;">
+          <label for="activityTitleInput" class="form-label">Nama Aktivitas / Sesi</label>
+          <input type="text" id="activityTitleInput" class="form-input" placeholder="Contoh: Registrasi Peserta, Sambutan...">
+        </div>
+        <div class="form-group" style="width: 120px;">
+          <label for="durationInput" class="form-label">Durasi (Menit)</label>
+          <input type="number" id="durationInput" class="form-input" min="1" value="30">
+        </div>
+        <div class="form-group" style="width: 140px;">
+          <label for="picInput" class="form-label">PIC / Divisi</label>
+          <input type="text" id="picInput" class="form-input" placeholder="Sie Acara">
+        </div>
+        <button id="addSessionBtn" class="btn btn--primary" type="button" style="height: 38px;">
+          + Tambah Sesi
+        </button>
+      </div>
+    </div>
+
+    <!-- Table of Rundown -->
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th style="width: 6%;">No</th>
+            <th style="width: 15%;">Mulai</th>
+            <th style="width: 15%;">Selesai</th>
+            <th style="width: 14%;">Durasi</th>
+            <th style="width: 30%;">Aktivitas / Sesi</th>
+            <th style="width: 14%;">PIC</th>
+            <th style="width: 6%;">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="rundownTableBody">
+          <!-- Rendered via JS -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Summary & Export Actions -->
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 4rem; padding: 1rem; background: #ffffff; border: 1px solid var(--color-border); border-radius: var(--radius-md);">
+      <div>
+        <span style="font-size: 0.95rem; color: var(--color-text-muted);">Total Durasi: </span>
+        <strong id="totalDurationDisplay" style="color: var(--color-charcoal-dark); font-size: 1.05rem;">0 Menit</strong>
+        <span style="font-size: 0.95rem; color: var(--color-text-muted);"> (Selesai Jam: <strong id="endTimeDisplay" style="color: var(--color-royal-blue);">--:--</strong>)</span>
+      </div>
+      <div style="display: flex; gap: 0.5rem;">
+        <button id="loadPresetBtn" class="btn btn--secondary btn--sm" type="button">
+          Muat Contoh
+        </button>
+        <button id="copyRundownBtn" class="btn btn--secondary btn--sm" type="button">
+          Salin Teks Rundown
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div><strong>COLLEST</strong> &mdash; One Platform, Every Event Need</div>
+      <div class="footer__links">
+        <a href="index.html">Beranda</a>
+        <a href="events.html">Cari Event</a>
+        <a href="vendors.html">Cari Vendor</a>
+        <a href="rundown.html">Buat Rundown</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/pages/rundown.js"></script>
+</body>
+</html>

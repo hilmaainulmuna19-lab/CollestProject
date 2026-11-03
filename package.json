@@ -1,0 +1,17 @@
+{
+  "name": "collest-web",
+  "version": "1.0.0",
+  "description": "COLLEST - One Platform, Every Event Need",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "campus-event",
+    "vendor-finder",
+    "rundown-generator",
+    "umkm-booth"
+  ],
+  "author": "COLLEST Team",
+  "license": "MIT"
+}

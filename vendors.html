@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Katalog Vendor Kampus & Template Chat WhatsApp Admin - COLLEST">
+  <title>Cari Vendor &amp; Chat WA — COLLEST</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/tiles.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages/vendors.css">
+  <link rel="icon" type="image/png" href="assets/collest-logo.png">
+</head>
+<body class="has-tiles">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="index.html" class="header__brand" aria-label="Beranda COLLEST">
+        <img src="assets/collest-logo.png" alt="Logo COLLEST" class="header__logo-img">
+        <span class="header__brand-name">COLLEST</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="header__nav" aria-label="Navigasi Utama">
+        <a href="index.html" class="header__link">Beranda</a>
+        <a href="events.html" class="header__link">Cari Event</a>
+        <a href="vendors.html" class="header__link is-active">Cari Vendor</a>
+        <a href="rundown.html" class="header__link">Buat Rundown</a>
+      </nav>
+
+      <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Buka Menu" aria-expanded="false">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Mobile Nav -->
+    <nav id="mobileNav" class="mobile-nav" aria-label="Navigasi Mobile">
+      <a href="index.html" class="header__link">Beranda</a>
+      <a href="events.html" class="header__link">Cari Event</a>
+      <a href="vendors.html" class="header__link is-active">Cari Vendor</a>
+      <a href="rundown.html" class="header__link">Buat Rundown</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <div class="page-header">
+      <h1 class="page-title">Cari <em>Vendor</em> yang Pas</h1>
+      <p class="page-subtitle">
+        Pilih yang kamu butuhkan, atur rentang harga, dan tentukan lokasi acara. Vendor yang relevan langsung muncul di sebelah kanan.
+      </p>
+    </div>
+
+    <!-- Finder: kebutuhan + rentang harga + lokasi -> hasil relevan -->
+    <section class="finder" aria-labelledby="finderTitle">
+      <div class="finder__head">
+        <div class="finder__eyebrow">Vendor finder</div>
+        <h2 id="finderTitle" class="finder__title">Dapatkan vendor yang pas dengan <em>budget</em> dan lokasimu</h2>
+      </div>
+
+      <div class="finder__panel">
+        <form class="finder__left" id="finderForm" onsubmit="return false" aria-label="Filter vendor">
+          <fieldset>
+            <legend>Apa yang kamu butuhkan?</legend>
+            <label class="opt"><input type="radio" name="need" value="Konsumsi / Catering"> Konsumsi / Catering <small>makanan &amp; snack</small></label>
+            <label class="opt"><input type="radio" name="need" value="Sound System & Lighting"> Sound System &amp; Lighting <small>audio &amp; lampu</small></label>
+            <label class="opt"><input type="radio" name="need" value="Panggung & Tenda"> Panggung &amp; Tenda <small>stage, tenda, kursi</small></label>
+            <label class="opt"><input type="radio" name="need" value="Fotografi & Dokumentasi"> Fotografi &amp; Dokumentasi <small>foto, video, drone</small></label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Rentang harga <small>per paket / unit</small></legend>
+            <div class="range-row">
+              <div class="range-row__top"><label for="priceMin">Minimum</label><output id="priceMinOut" for="priceMin">Rp0</output></div>
+              <input type="range" id="priceMin" min="0" max="9" step="1" value="0">
+            </div>
+            <div class="range-row">
+              <div class="range-row__top"><label for="priceMax">Maksimum</label><output id="priceMaxOut" for="priceMax">Tanpa batas</output></div>
+              <input type="range" id="priceMax" min="0" max="9" step="1" value="9">
+              <div class="range-scale"><span>Rp0</span><span>Rp5jt+</span></div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Lokasi acara</legend>
+            <div class="chips" id="areaChips">
+              <label class="chip"><input type="radio" name="area" value="" checked><span>Semua area</span></label>
+              <label class="chip"><input type="radio" name="area" value="Depok"><span>Depok</span></label>
+              <label class="chip"><input type="radio" name="area" value="Jakarta"><span>Jakarta</span></label>
+              <label class="chip"><input type="radio" name="area" value="Bogor"><span>Bogor</span></label>
+              <label class="chip"><input type="radio" name="area" value="Tangerang Selatan"><span>Tangerang Selatan</span></label>
+              <label class="chip"><input type="radio" name="area" value="Bekasi"><span>Bekasi</span></label>
+            </div>
+          </fieldset>
+        </form>
+
+        <div class="finder__right">
+          <div class="finder__rhead">
+            <h3>Hasil untuk kamu</h3>
+            <p id="finderSummary">Pilih kebutuhan dulu, lalu atur harga dan lokasi.</p>
+          </div>
+          <div id="finderResults" class="finder__results" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Katalog lengkap (spesifikasi detail semua vendor) -->
+    <div class="catalog-head">
+      <h2>Semua vendor</h2>
+      <p>Spesifikasi lengkap, alamat, dan daftar harga tiap vendor.</p>
+    </div>
+    <div id="vendorsGrid" class="cards-grid"></div>
+
+    <!-- Pesanan vendor: satu vendor per jenis, detail acara diisi sekali -->
+    <section id="waOrderSection" class="order">
+      <div class="order__head">
+        <h2 class="order__title">Pesanan kamu</h2>
+        <p class="order__sub">Pilih satu vendor per jenis (misalnya catering, fotografi, sound). Detail acara cukup diisi sekali.</p>
+      </div>
+
+      <p id="orderEmpty" class="order__empty">Belum ada vendor. Klik <b>Pesan vendor</b> pada hasil pencarian atau katalog di atas.</p>
+
+      <div id="orderBody" hidden>
+        <p id="cartNote" class="order__note" role="status"></p>
+
+        <!-- Langkah 1: template tiap vendor -->
+        <div class="order__step">1. Vendor dan template</div>
+        <div id="orderTabs" class="ord-tabs" role="tablist" aria-label="Vendor dalam pesanan"></div>
+        <div class="order__panel">
+          <div class="order__vendor">
+            <div>
+              <div id="selectedVendorName" class="order__vname"></div>
+              <div id="selectedVendorAddress" class="order__vaddr"></div>
+            </div>
+            <button id="removeVendorBtn" class="btn btn--secondary btn--sm" type="button">Hapus dari pesanan</button>
+          </div>
+          <div class="form-group">
+            <label for="waPackageSelect" class="form-label">Paket / layanan</label>
+            <select id="waPackageSelect" class="form-select"></select>
+          </div>
+          <div class="form-group">
+            <label for="waSpecsTextarea" class="form-label">Spesifikasi kebutuhan (bebas diubah)</label>
+            <textarea id="waSpecsTextarea" class="form-textarea" rows="4"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="waNotesInput" class="form-label">Catatan (opsional)</label>
+            <input type="text" id="waNotesInput" class="form-input" placeholder="Contoh: butuh kuitansi resmi">
+          </div>
+        </div>
+
+        <!-- Langkah 2: detail acara, berlaku untuk semua vendor -->
+        <div class="order__step">2. Detail acara <small>(berlaku untuk semua vendor)</small></div>
+        <div class="order__grid">
+          <div class="form-group">
+            <label for="waSenderInput" class="form-label">Nama pemesan <span class="req">*</span></label>
+            <input type="text" id="waSenderInput" class="form-input" placeholder="Contoh: Budi (Sie Konsumsi)">
+          </div>
+          <div class="form-group">
+            <label for="waEventInput" class="form-label">Nama acara</label>
+            <input type="text" id="waEventInput" class="form-input" placeholder="Contoh: Seminar Nasional AI 2026">
+          </div>
+          <div class="form-group">
+            <label for="waLocationInput" class="form-label">Lokasi acara</label>
+            <input type="text" id="waLocationInput" class="form-input" placeholder="Contoh: Aula Gedung B, Kampus A">
+          </div>
+          <div class="form-group">
+            <label for="waDateInput" class="form-label">Tanggal <span class="req">*</span></label>
+            <input type="date" id="waDateInput" class="form-input">
+          </div>
+          <div class="form-group">
+            <label for="waStartInput" class="form-label">Jam mulai (WIB) <span class="req">*</span></label>
+            <input type="time" id="waStartInput" class="form-input" value="08:00">
+          </div>
+          <div class="form-group">
+            <label for="waEndInput" class="form-label">Jam selesai (WIB) <span class="req">*</span></label>
+            <input type="time" id="waEndInput" class="form-input" value="16:00">
+          </div>
+          <div class="form-group">
+            <label for="waParticipantsInput" class="form-label">Jumlah peserta <span class="req">*</span></label>
+            <input type="number" id="waParticipantsInput" class="form-input" min="1" placeholder="Contoh: 120">
+          </div>
+          <div class="form-group">
+            <label for="waPunctualitySelect" class="form-label">Ketepatan waktu</label>
+            <select id="waPunctualitySelect" class="form-select">
+              <option value="strict">Wajib tepat waktu</option>
+              <option value="tolerant">Toleransi maksimal 15 menit</option>
+              <option value="flexible">Fleksibel</option>
+            </select>
+          </div>
+        </div>
+
+      <!-- Rundown Acara: diambil otomatis dari halaman Buat Rundown (ikut terkirim ke WhatsApp) -->
+      <div style="border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1rem; margin-bottom: 1.25rem; background: #fafbfc;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:.75rem; flex-wrap:wrap; margin-bottom:.75rem;">
+          <div>
+            <h3 style="font-size:1.05rem; font-weight:800; color:var(--color-charcoal-dark);">Rundown Acara</h3>
+            <p style="font-size:.825rem; color:var(--color-text-muted); line-height:1.5; max-width:560px;">
+              Rundown diambil otomatis dari halaman <a href="rundown.html">Buat Rundown</a>, jadi tidak perlu diisi ulang di sini.
+            </p>
+          </div>
+          <label style="display:flex; align-items:center; gap:.4rem; font-size:.85rem; font-weight:600;">
+            <input type="checkbox" id="rdInclude" checked> Sertakan rundown di pesan WhatsApp
+          </label>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width:8%;">No</th>
+                <th style="width:26%;">Waktu</th>
+                <th style="width:14%;">Durasi</th>
+                <th style="width:34%;">Aktivitas</th>
+                <th style="width:18%;">PIC</th>
+              </tr>
+            </thead>
+            <tbody id="rdTableBody"></tbody>
+          </table>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.75rem; margin-top:.75rem;">
+          <div id="rdSummary" style="font-size:.875rem;"></div>
+          <div style="display:flex; gap:.5rem; flex-wrap:wrap;">
+            <a class="btn btn--secondary btn--sm" href="rundown.html">Ubah Rundown</a>
+            <button id="rdCopyBtn" class="btn btn--secondary btn--sm" type="button">Salin Rundown</button>
+          </div>
+        </div>
+      </div>
+
+        <!-- Langkah 3: kirim -->
+        <div class="order__step">3. Pratinjau dan kirim</div>
+        <div class="form-group" style="max-width:360px; margin-bottom:.75rem;">
+          <label for="waPreviewScope" class="form-label">Pratinjau pesan untuk</label>
+          <select id="waPreviewScope" class="form-select"></select>
+        </div>
+        <div class="wa-box">
+          <div id="waPreviewText" class="wa-bubble" style="white-space: pre-wrap;"></div>
+        </div>
+
+        <p id="waError" class="order__error" style="display:none;" role="alert"></p>
+
+        <div class="order__actions">
+          <a id="btnSendWhatsApp" href="#" target="_blank" rel="noopener noreferrer" class="btn btn--whatsapp order__send">Kirim semua ke Admin WhatsApp</a>
+          <a id="btnSendOne" href="#" target="_blank" rel="noopener noreferrer" class="btn btn--secondary">Kirim vendor ini saja</a>
+          <button id="btnCopyWa" class="btn btn--secondary" type="button">Salin Pesan</button>
+        </div>
+        <p class="order__hint">Semua pesan masuk lewat satu nomor Admin COLLEST. Pesan terkirim ditandai centang pada tab vendor.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div><strong>COLLEST</strong> &mdash; One Platform, Every Event Need</div>
+      <div class="footer__links">
+        <a href="index.html">Beranda</a>
+        <a href="events.html">Cari Event</a>
+        <a href="vendors.html">Cari Vendor</a>
+        <a href="rundown.html">Buat Rundown</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/pages/vendors.js"></script>
+</body>
+</html>
