@@ -183,8 +183,10 @@ function openModal(id, divisionName, roleName) {
   activeEvent = eventStore.list().find((e) => e.id === id);
   if (!activeEvent) return;
   $('applicantForm').reset();
-  const me = getSession();   // sudah login: nama & NIM terisi otomatis
+  const me = getSession();   // pendaftaran hanya untuk akun yang sudah login
   if (me) { $('formApplicantName').value = me.name; $('formStudentNumber').value = me.nim; }
+  $('formApplicantName').readOnly = true;
+  $('formStudentNumber').readOnly = true;
   $('applyFormView').hidden = false;
   $('applySuccessView').hidden = true;
   $('modalEventTitle').textContent = activeEvent.title;
@@ -194,7 +196,7 @@ function openModal(id, divisionName, roleName) {
     `<option value="${escapeHtml(d.name)}">${escapeHtml(d.name)}</option>`).join('');
   if (divisionName) $('formDivisionSelect').value = divisionName;
   fillRoleOptions(roleName);
-  showFormError('');
+  showFormError(me ? '' : 'Login dulu dengan akun mahasiswa untuk mendaftar.');
   $('eventDetailModal').showModal();
   $('formApplicantName').focus();
 }
@@ -212,20 +214,34 @@ $('resetEventFilterBtn').addEventListener('click', () => {
 
 $('applicantForm').addEventListener('submit', (ev) => {
   ev.preventDefault();
+  const me = getSession();
+  if (!me) return showFormError('Login dulu dengan akun mahasiswa untuk mendaftar.');
   const data = {
     eventId: activeEvent.id,
     eventTitle: activeEvent.title,
-    name: $('formApplicantName').value.trim(),
-    nim: $('formStudentNumber').value.trim(),
+    username: me.username,
+    name: me.name,
+    nim: me.nim,                       // NIM diambil dari sesi, tidak dari ketikan
     division: $('formDivisionSelect').value,
     role: $('formRoleSelect').value,
     reason: $('formApplicantReason').value.trim()
   };
-  if (!data.name || !data.nim || !data.reason) return showFormError('Nama, NIM, dan alasan wajib diisi.');
+  if (!data.reason) return showFormError('Alasan bergabung wajib diisi.');
   if (!/^\d{5,20}$/.test(data.nim)) return showFormError('NIM hanya berisi angka (5–20 digit).');
   if (!isEventOpen(activeEvent)) return showFormError('Pendaftaran event ini sudah ditutup.');
-  if (eventStore.listRegistrations().some((r) => r.eventId === data.eventId && r.nim === data.nim)) {
+
+  const log = eventStore.listRegistrations();
+  if (log.some((r) => r.eventId === data.eventId && r.nim === data.nim)) {
     return showFormError('NIM ini sudah terdaftar di event ini.');
+  }
+  if (log.some((r) => r.eventId === data.eventId && r.username === data.username)) {
+    return showFormError('Akun ini sudah mendaftar di event ini.');
+  }
+  if (log.some((r) => r.nim === data.nim && r.username !== data.username)) {
+    return showFormError('NIM ini sudah dipakai akun lain.');
+  }
+  if (log.some((r) => r.username === data.username && r.nim !== data.nim)) {
+    return showFormError('Akun ini sudah terkait dengan NIM lain.');
   }
   showFormError('');
 
