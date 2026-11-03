@@ -196,7 +196,9 @@ function openModal(id, divisionName, roleName) {
     `<option value="${escapeHtml(d.name)}">${escapeHtml(d.name)}</option>`).join('');
   if (divisionName) $('formDivisionSelect').value = divisionName;
   fillRoleOptions(roleName);
-  showFormError(me ? '' : 'Login dulu dengan akun mahasiswa untuk mendaftar.');
+  showFormError(!me ? 'Login dulu dengan akun mahasiswa untuk mendaftar.'
+    : me.role !== 'user' ? 'Akun panitia tidak dapat mendaftar kepanitiaan. Akun ini hanya untuk mengelola event.'
+    : '');
   $('eventDetailModal').showModal();
   $('formApplicantName').focus();
 }
@@ -216,6 +218,7 @@ $('applicantForm').addEventListener('submit', (ev) => {
   ev.preventDefault();
   const me = getSession();
   if (!me) return showFormError('Login dulu dengan akun mahasiswa untuk mendaftar.');
+  if (me.role !== 'user') return showFormError('Akun panitia tidak dapat mendaftar kepanitiaan. Akun ini hanya untuk mengelola event.');
   const data = {
     eventId: activeEvent.id,
     eventTitle: activeEvent.title,
@@ -234,8 +237,8 @@ $('applicantForm').addEventListener('submit', (ev) => {
   if (log.some((r) => r.eventId === data.eventId && r.nim === data.nim)) {
     return showFormError('NIM ini sudah terdaftar di event ini.');
   }
-  if (log.some((r) => r.eventId === data.eventId && r.username === data.username)) {
-    return showFormError('Akun ini sudah mendaftar di event ini.');
+  if (log.some((r) => r.username === data.username)) {
+    return showFormError('Akun ini sudah terdaftar di satu event. Saat ini satu akun hanya bisa mendaftar satu event.');
   }
   if (log.some((r) => r.nim === data.nim && r.username !== data.username)) {
     return showFormError('NIM ini sudah dipakai akun lain.');
